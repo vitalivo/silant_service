@@ -9,12 +9,12 @@ from .serializers import MachineListSerializer, MachineDetailSerializer
 class MachinePermission(permissions.BasePermission):
     """
     Кастомные разрешения для машин:
-    - Неавторизованные: только список с ограниченными полями
+    - Неавторизованные: только список с ограниченными полями и поиск по серийному номеру
     - Авторизованные: полная информация
     """
     def has_permission(self, request, view):
-        if view.action == 'list':
-            return True  # Список доступен всем
+        if view.action in ['list', 'search_by_serial']:  # Добавили search_by_serial
+            return True  # Список и поиск доступны всем
         return request.user.is_authenticated
 
 class MachineViewSet(viewsets.ReadOnlyModelViewSet):
@@ -50,7 +50,7 @@ class MachineViewSet(viewsets.ReadOnlyModelViewSet):
         
         return queryset
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny])  # Добавили AllowAny
     def search_by_serial(self, request):
         """Поиск машины по серийному номеру"""
         serial = request.query_params.get('serial', '')
@@ -58,8 +58,14 @@ class MachineViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({'error': 'Параметр serial обязателен'}, status=400)
         
         try:
-            machine = self.get_queryset().get(serial_number=serial)
-            serializer = self.get_serializer(machine)
+            # Используем публичный queryset без фильтрации по пользователю
+            machine = Machine.objects.select_related(
+                'technique_model', 'engine_model', 'transmission_model',
+                'drive_axle_model', 'steer_axle_model'
+            ).get(serial_number=serial)
+            
+            # Используем ограниченный сериализатор для неавторизованных
+            serializer = MachineListSerializer(machine)
             return Response(serializer.data)
         except Machine.DoesNotExist:
             return Response({'error': 'Машина не найдена'}, status=404)
