@@ -1,0 +1,18 @@
+from rest_framework import serializers
+from .models import Maintenance
+from machines.serializers import MachineListSerializer
+from directories.serializers import MaintenanceTypeSerializer, ServiceCompanySerializer
+
+class MaintenanceSerializer(serializers.ModelSerializer):
+    machine = MachineListSerializer(read_only=True)
+    maintenance_type = MaintenanceTypeSerializer(read_only=True)
+    service_company = ServiceCompanySerializer(read_only=True)
+    machine_serial = serializers.CharField(source='machine.serial_number', read_only=True)
+    
+    class Meta:
+        model = Maintenance
+        fields = [
+            'id', 'maintenance_type', 'maintenance_date', 'operating_hours',
+            'work_order_number', 'work_order_date', 'maintenance_company',
+            'machine', 'machine_serial', 'service_company'
+        ]
