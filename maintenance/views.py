@@ -9,24 +9,9 @@ class MaintenanceViewSet(viewsets.ReadOnlyModelViewSet):
         'machine', 'maintenance_type', 'service_company'
     ).all()
     serializer_class = MaintenanceSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]  # Временно разрешить всем
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['maintenance_type', 'machine', 'service_company']
     search_fields = ['work_order_number', 'machine__serial_number']
     ordering_fields = ['maintenance_date', 'operating_hours']
     ordering = ['-maintenance_date']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        
-        # Фильтрация по пользователю
-        user_groups = self.request.user.groups.values_list('name', flat=True)
-        
-        if 'Клиенты' in user_groups:
-            # Клиент видит ТО только своих машин
-            queryset = queryset.filter(machine__client=self.request.user)
-        elif 'Сервисные организации' in user_groups:
-            # Сервисная организация видит ТО машин, которые она обслуживает
-            queryset = queryset.filter(service_company=self.request.user)
-        
-        return queryset

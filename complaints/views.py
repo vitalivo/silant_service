@@ -9,7 +9,7 @@ class ComplaintViewSet(viewsets.ReadOnlyModelViewSet):
         'machine', 'failure_node', 'recovery_method', 'service_company'
     ).all()
     serializer_class = ComplaintSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['failure_node', 'recovery_method', 'machine', 'service_company']
     search_fields = ['failure_description', 'machine__serial_number']
