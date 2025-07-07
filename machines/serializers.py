@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Machine
 from directories.serializers import (
     TechniqueModelSerializer, EngineModelSerializer, TransmissionModelSerializer,
-    DriveAxleModelSerializer, SteerAxleModelSerializer, ServiceCompanySerializer
+    DriveAxleModelSerializer, SteerAxleModelSerializer
 )
 
 class MachineListSerializer(serializers.ModelSerializer):
@@ -29,8 +29,8 @@ class MachineDetailSerializer(serializers.ModelSerializer):
     transmission_model = TransmissionModelSerializer(read_only=True)
     drive_axle_model = DriveAxleModelSerializer(read_only=True)
     steer_axle_model = SteerAxleModelSerializer(read_only=True)
-    service_company = ServiceCompanySerializer(read_only=True)
-    client_name = serializers.CharField(source='client.first_name', read_only=True)
+    client_name = serializers.CharField(source='client.get_full_name', read_only=True)
+    service_company_name = serializers.CharField(source='service_company.get_full_name', read_only=True)
     
     class Meta:
         model = Machine
@@ -40,5 +40,5 @@ class MachineDetailSerializer(serializers.ModelSerializer):
             'drive_axle_model', 'drive_axle_serial', 'steer_axle_model', 
             'steer_axle_serial', 'supply_contract', 'shipment_date',
             'consignee', 'delivery_address', 'equipment', 'client_name',
-            'service_company'
+            'service_company_name'
         ]
