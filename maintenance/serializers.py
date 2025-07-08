@@ -7,7 +7,7 @@ class MaintenanceSerializer(serializers.ModelSerializer):
     machine = MachineListSerializer(read_only=True)
     maintenance_type = MaintenanceTypeSerializer(read_only=True)
     machine_serial = serializers.CharField(source='machine.serial_number', read_only=True)
-    service_company_name = serializers.CharField(source='service_company.get_full_name', read_only=True)
+    service_company_name = serializers.CharField(source='service_company.name', read_only=True)
     
     class Meta:
         model = Maintenance

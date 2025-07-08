@@ -1,93 +1,215 @@
-import React, { useState } from 'react';
-import { Search } from 'lucide-react';
-import { machineService } from '../services/api';
+"use client"
+
+import type React from "react"
+import { useState } from "react"
+import { Search } from "lucide-react"
+import { machineService } from "../services/api"
+import styles from "../styles/HomePage.module.css"
 
 const HomePage: React.FC = () => {
-  const [serialNumber, setSerialNumber] = useState('');
-  const [machine, setMachine] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [serialNumber, setSerialNumber] = useState("")
+  const [machine, setMachine] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!serialNumber.trim()) return;
+    e.preventDefault()
+    if (!serialNumber.trim()) return
 
-    setLoading(true);
-    setError(null);
-    
+    setLoading(true)
+    setError(null)
+
     try {
-      const response = await machineService.searchBySerial(serialNumber);
-      setMachine(response.data);
-    } catch (err) {
-      setError('Машина с таким серийным номером не найдена');
-      setMachine(null);
+      const response = await machineService.searchBySerial(serialNumber)
+      setMachine(response.data)
+    } catch (err: any) {
+      console.error("Ошибка поиска:", err)
+      if (err.response?.status === 404) {
+        setError("Машина с таким серийным номером не найдена")
+      } else {
+        setError(`Ошибка при поиске: ${err.message || "Неизвестная ошибка"}`)
+      }
+      setMachine(null)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
+
+  const features = [
+    {
+      icon: "🛡️",
+      title: "Надёжность",
+      description: "Высокое качество и долговечность нашей техники проверены временем",
+      iconClass: styles.featureIconBlue,
+    },
+    {
+      icon: "🔧",
+      title: "Сервис",
+      description: "Полное техническое обслуживание и поддержка по всей России",
+      iconClass: styles.featureIconGreen,
+    },
+    {
+      icon: "🏆",
+      title: "Качество",
+      description: "Соответствие всем стандартам и требованиям безопасности",
+      iconClass: styles.featureIconPurple,
+    },
+    {
+      icon: "👥",
+      title: "Поддержка",
+      description: "Профессиональная команда специалистов всегда готова помочь",
+      iconClass: styles.featureIconOrange,
+    },
+  ]
+
+  const stats = [
+    { number: "1000+", label: "Машин в эксплуатации", icon: "🚛" },
+    { number: "50+", label: "Регионов присутствия", icon: "🗺️" },
+    { number: "24/7", label: "Техническая поддержка", icon: "📞" },
+  ]
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">
-          Проверьте комплектацию и технические характеристики техники Силант
-        </h1>
-        <p className="text-gray-600">
-          Введите заводской номер машины для получения информации
-        </p>
-      </div>
-
-      <form onSubmit={handleSearch} className="mb-8">
-        <div className="flex gap-4 max-w-md mx-auto">
-          <input
-            type="text"
-            value={serialNumber}
-            onChange={(e) => setSerialNumber(e.target.value)}
-            placeholder="Заводской номер машины"
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
-          >
-            <Search size={20} />
-            {loading ? 'Поиск...' : 'Найти'}
-          </button>
-        </div>
-      </form>
-
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-
-      {machine && (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Информация о машине</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <h3 className="font-semibold text-gray-700">Заводской номер</h3>
-              <p className="text-gray-900">{machine.serial_number}</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-700">Модель техники</h3>
-              <p className="text-gray-900">{machine.technique_model?.name}</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-700">Модель двигателя</h3>
-              <p className="text-gray-900">{machine.engine_model?.name}</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-700">Дата отгрузки</h3>
-              <p className="text-gray-900">{machine.shipment_date && new Date(machine.shipment_date).toLocaleDateString('ru-RU')}</p>
+    <div className={styles.container}>
+      {/* Hero Section */}
+      <section className={styles.hero}>
+        <div className={styles.heroContent}>
+          {/* Logo */}
+          <div className={styles.logoContainer}>
+            <div className={styles.logoWrapper}>
+              <img src="/images/logo-red.jpg" alt="Силант" className={styles.logo} />
             </div>
           </div>
-        </div>
-      )}
-    </div>
-  );
-};
 
-export default HomePage;
+          <div className={styles.badge}>
+            <span style={{ marginRight: "8px" }}>⚡</span>
+            Система мониторинга техники СИЛАНТ
+          </div>
+
+          <h1 className={styles.title}>
+            Проверьте свою
+            <span className={styles.titleGradient}>технику СИЛАНТ</span>
+          </h1>
+
+          <p className={styles.subtitle}>
+            Введите заводской номер для получения полной информации о комплектации, технических характеристиках и
+            истории обслуживания вашей техники
+          </p>
+
+          {/* Search Form */}
+          <form onSubmit={handleSearch} className={styles.searchForm}>
+            <div className={styles.searchContainer}>
+              <input
+                type="text"
+                value={serialNumber}
+                onChange={(e) => setSerialNumber(e.target.value)}
+                placeholder="Введите заводской номер машины..."
+                className={styles.searchInput}
+              />
+              <button type="submit" disabled={loading} className={styles.searchButton}>
+                <Search size={20} />
+                {loading ? "Поиск..." : "Найти"}
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      {/* Error Message */}
+      {error && (
+        <section className={styles.errorSection}>
+          <div className={styles.errorContainer}>
+            <div className={styles.errorCard}>
+              <span style={{ fontSize: "24px" }}>⚠️</span>
+              <p className={styles.errorText}>{error}</p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Machine Info */}
+      {machine && (
+        <section className={styles.machineSection}>
+          <div className={styles.machineContainer}>
+            <div className={styles.machineCard}>
+              <div className={styles.machineHeader}>
+                <div className={styles.machineHeaderContent}>
+                  <div className={styles.machineIcon}>🏆</div>
+                  <div>
+                    <h2 className={styles.machineTitle}>Информация о машине</h2>
+                    <p className={styles.machineSerial}>Серийный номер: {machine.serial_number}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.machineContent}>
+                <div className={styles.machineGrid}>
+                  {[
+                    { label: "Модель техники", value: machine.technique_model?.name, icon: "🚛" },
+                    { label: "Модель двигателя", value: machine.engine_model?.name, icon: "⚙️" },
+                    { label: "Серийный номер двигателя", value: machine.engine_serial, icon: "🔢" },
+                    { label: "Модель трансмиссии", value: machine.transmission_model?.name, icon: "🔧" },
+                    { label: "Серийный номер трансмиссии", value: machine.transmission_serial, icon: "🔢" },
+                    {
+                      label: "Дата отгрузки",
+                      value: machine.shipment_date ? new Date(machine.shipment_date).toLocaleDateString("ru-RU") : "—",
+                      icon: "📅",
+                    },
+                  ].map((item, index) => (
+                    <div key={index} className={styles.machineItem}>
+                      <div className={styles.machineItemHeader}>
+                        <span className={styles.machineItemIcon}>{item.icon}</span>
+                        <h3 className={styles.machineItemLabel}>{item.label}</h3>
+                      </div>
+                      <p className={styles.machineItemValue}>{item.value || "—"}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Features Section */}
+      <section className={styles.featuresSection}>
+        <div className={styles.featuresContainer}>
+          <div className={styles.featuresHeader}>
+            <h2 className={styles.featuresTitle}>Почему выбирают СИЛАНТ</h2>
+            <p className={styles.featuresSubtitle}>
+              Мы предоставляем надежную технику и качественное обслуживание по всей России уже более 20 лет
+            </p>
+          </div>
+
+          <div className={styles.featuresGrid}>
+            {features.map((feature, index) => (
+              <div key={index} className={styles.featureCard}>
+                <div className={`${styles.featureIcon} ${feature.iconClass}`}>
+                  <span>{feature.icon}</span>
+                </div>
+                <h3 className={styles.featureTitle}>{feature.title}</h3>
+                <p className={styles.featureDescription}>{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className={styles.statsSection}>
+        <div className={styles.statsContainer}>
+          <div className={styles.statsGrid}>
+            {stats.map((stat, index) => (
+              <div key={index} className={styles.statCard}>
+                <div className={styles.statIcon}>{stat.icon}</div>
+                <div className={styles.statNumber}>{stat.number}</div>
+                <div className={styles.statLabel}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+export default HomePage

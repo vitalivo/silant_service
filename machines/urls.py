@@ -5,7 +5,7 @@ from .views import MachineViewSet
 app_name = 'machines'
 
 router = DefaultRouter()
-router.register(r'machines', MachineViewSet)
+router.register(r'machines', MachineViewSet, basename='machine')
 
 urlpatterns = [
     path('', include(router.urls)),

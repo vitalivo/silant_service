@@ -29,8 +29,8 @@ class MachineDetailSerializer(serializers.ModelSerializer):
     transmission_model = TransmissionModelSerializer(read_only=True)
     drive_axle_model = DriveAxleModelSerializer(read_only=True)
     steer_axle_model = SteerAxleModelSerializer(read_only=True)
-    client_name = serializers.CharField(source='client.get_full_name', read_only=True)
-    service_company_name = serializers.CharField(source='service_company.get_full_name', read_only=True)
+    client_name = serializers.SerializerMethodField()
+    service_company_name = serializers.CharField(source='service_company.name', read_only=True)
     
     class Meta:
         model = Machine
@@ -42,3 +42,13 @@ class MachineDetailSerializer(serializers.ModelSerializer):
             'consignee', 'delivery_address', 'equipment', 'client_name',
             'service_company_name'
         ]
+    
+    def get_client_name(self, obj):
+        """Получаем имя клиента"""
+        if obj.client:
+            if hasattr(obj.client, 'get_full_name'):
+                full_name = obj.client.get_full_name()
+                return full_name if full_name.strip() else obj.client.username
+            else:
+                return str(obj.client)
+        return None
