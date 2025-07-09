@@ -38,8 +38,11 @@ const AuthService: React.FC<AuthServiceProps> = ({ children }) => {
         withCredentials: true,
       })
       setUser(response.data)
-    } catch (err) {
-      // Пользователь не авторизован - это нормально
+    } catch (err: any) {
+      // 401 - это нормально для неавторизованных пользователей
+      if (err.response?.status !== 401) {
+        console.error("Ошибка проверки авторизации:", err)
+      }
       setUser(null)
     }
   }
