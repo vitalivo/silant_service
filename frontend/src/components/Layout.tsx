@@ -1,67 +1,94 @@
+"use client"
+
 import type React from "react"
 import Header from "./Header"
+import styles from "../styles/Layout.module.css"
 
 interface LayoutProps {
   children: React.ReactNode
+  user?: any
+  onShowLogin?: () => void
+  onLogout?: () => void
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({ children, user, onShowLogin, onLogout }) => {
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main>{children}</main>
+    <div className={styles.layout}>
+      <Header user={user} onShowLogin={onShowLogin} onLogout={onLogout} />
+      <main className={styles.main}>{children}</main>
 
-      {/* Простой и чистый футер */}
-      <footer className="bg-gray-900 text-white py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Company Info */}
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-4 mb-6">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-2xl blur opacity-30"></div>
-                  <div className="relative bg-white p-3 rounded-2xl shadow-lg w-16 h-16 flex items-center justify-center overflow-hidden">
-                    <img
-                      src="/public/images/Logot3.jpg"
-                      alt="Силант"
-                      className="max-w-10 max-h-10 w-10 h-10 object-contain object-center"
-                      style={{ maxWidth: "40px", maxHeight: "40px" }}
-                    />
-                  </div>
+      {/* Красивый футер с градиентами и анимациями */}
+      <footer className={styles.footer}>
+        {/* Анимированный фон */}
+        <div className={styles.footerBackground} />
+
+        <div className={styles.footerContainer}>
+          {/* Основной контент футера */}
+          <div className={styles.footerContent}>
+            {/* Информация о компании */}
+            <div className={styles.companyInfo}>
+              <div className={styles.companyHeader}>
+                <div className={styles.companyLogo}>
+                  <img src="/public/images/Logo1.jpg" alt="Силант" className={styles.companyLogoImg} />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold font-astra">СИЛАНТ</h3>
-                  <p className="text-gray-400 font-astra">Чебоксарский завод силовых агрегатов</p>
+                  <h3 className={styles.companyTitle}>СИЛАНТ</h3>
+                  <p className={styles.companySubtitle}>Чебоксарский завод</p>
                 </div>
               </div>
-              <p className="text-gray-400 leading-relaxed font-astra text-lg">
-                Ведущий производитель силовых агрегатов и специализированной техники. Обеспечиваем надежность и качество
-                на протяжении многих лет работы.
+              <p className={styles.companyDescription}>
+                Система мониторинга и управления техникой. Полный контроль за состоянием, обслуживанием и эксплуатацией
+                вашей техники.
               </p>
             </div>
 
-            {/* Contact */}
-            <div>
-              <h4 className="font-bold mb-6 text-xl font-astra">Контакты</h4>
-              <div className="space-y-3 text-gray-400 font-astra">
-                <div className="flex items-center space-x-2">
-                  <span>📍</span>
-                  <span>г. Чебоксары, Россия</span>
+            {/* Быстрые ссылки */}
+            <div className={styles.quickLinks}>
+              <h4 className={styles.sectionTitle}>🔗 Быстрые ссылки</h4>
+              <ul className={styles.linksList}>
+                {[
+                  { label: "🚛 Машины", href: "/machines" },
+                  { label: "🔧 Техническое обслуживание", href: "/maintenance" },
+                  { label: "📋 Рекламации", href: "/complaints" },
+                ].map((link, index) => (
+                  <li key={index} className={styles.linkItem}>
+                    <a href={link.href} className={styles.footerLink}>
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Контактная информация */}
+            <div className={styles.contactInfo}>
+              <h4 className={styles.sectionTitle}>📞 Контакты</h4>
+              <div className={styles.contactDetails}>
+                <div className={styles.contactItem}>
+                  <span>🏭</span>
+                  <span>г. Чебоксары, Чебоксарский завод</span>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className={styles.contactItem}>
+                  <span>🛠️</span>
+                  <span>Техническая поддержка 24/7</span>
+                </div>
+                <div className={styles.contactItem}>
                   <span>📧</span>
-                  <span className="text-blue-400">info@silant.ru</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span>📞</span>
-                  <span>+7 (8352) 00-00-00</span>
+                  <span>support@silant.ru</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p className="font-astra">© 2025 Чебоксарский завод "СИЛАНТ". Все права защищены.</p>
+          {/* Разделитель */}
+          <div className={styles.footerDivider} />
+
+          {/* Copyright */}
+          <div className={styles.footerBottom}>
+            <p className={styles.copyright}>© 2024 СИЛАНТ. Все права защищены.</p>
+            <div className={styles.footerMeta}>
+              <span className={styles.footerMetaText}>Сделано с ❤️ для эффективного управления техникой</span>
+            </div>
           </div>
         </div>
       </footer>
@@ -70,4 +97,3 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 }
 
 export default Layout
-

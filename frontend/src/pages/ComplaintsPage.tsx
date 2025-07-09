@@ -5,8 +5,10 @@ import { useState, useEffect } from "react"
 import { Search, Filter, RotateCcw, Lock } from "lucide-react"
 import { complaintsService, type Complaint } from "../services/api"
 import styles from "../styles/DataPage.module.css"
+import { usePageTitle } from "../hooks/usePageTitle"
 
 const ComplaintsPage: React.FC = () => {
+  usePageTitle("Рекламации")
   const [complaints, setComplaints] = useState<Complaint[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -252,4 +254,3 @@ const ComplaintsPage: React.FC = () => {
 }
 
 export default ComplaintsPage
-

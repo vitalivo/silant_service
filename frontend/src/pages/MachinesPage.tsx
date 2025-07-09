@@ -5,8 +5,10 @@ import { useState, useEffect } from "react"
 import { Search, Filter, RotateCcw } from "lucide-react"
 import { machineService, type Machine } from "../services/api"
 import styles from "../styles/DataPage.module.css"
+import { usePageTitle } from "../hooks/usePageTitle"
 
 const MachinesPage: React.FC = () => {
+  usePageTitle("Машины")
   const [machines, setMachines] = useState<Machine[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -210,7 +212,3 @@ const MachinesPage: React.FC = () => {
 }
 
 export default MachinesPage
-
-
-
-

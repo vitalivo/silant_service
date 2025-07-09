@@ -5,8 +5,10 @@ import { useState, useEffect } from "react"
 import { Search, Filter, RotateCcw, Lock } from "lucide-react"
 import { maintenanceService, type Maintenance } from "../services/api"
 import styles from "../styles/DataPage.module.css"
+import { usePageTitle } from "../hooks/usePageTitle"
 
 const MaintenancePage: React.FC = () => {
+  usePageTitle("Техническое обслуживание")
   const [maintenance, setMaintenance] = useState<Maintenance[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

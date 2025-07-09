@@ -185,6 +185,10 @@
   .logoText {
     display: none;
   }
+
+  .authSection {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -205,4 +209,69 @@
     width: 32px;
     height: 32px;
   }
+}
+
+.authSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userInfo {
+  padding: 8px 16px;
+  background: #f0f9ff;
+  border-radius: 12px;
+  border: 1px solid #bae6fd;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0369a1;
+  font-family: "PT Astra Sans", system-ui, sans-serif;
+}
+
+.logoutButton {
+  padding: 8px 16px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "PT Astra Sans", system-ui, sans-serif;
+}
+
+.logoutButton:hover {
+  background: #fee2e2;
+  transform: translateY(-1px);
+}
+
+.loginButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: "PT Astra Sans", system-ui, sans-serif;
+}
+
+.loginButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -3px rgba(59, 130, 246, 0.3);
 }
