@@ -1,5 +1,21 @@
 from django.db import models
 
+class Directory(models.Model):
+    """
+    Справочник для хранения различных типов данных
+    """
+    entity_name = models.CharField(max_length=100, verbose_name='Название сущности')
+    name = models.CharField(max_length=200, verbose_name='Название')
+    description = models.TextField(blank=True, verbose_name='Описание')
+    
+    class Meta:
+        verbose_name = 'Справочник'
+        verbose_name_plural = 'Справочники'
+        unique_together = ['entity_name', 'name']
+    
+    def __str__(self):
+        return f"{self.entity_name}: {self.name}"
+
 class TechniqueModel(models.Model):
     """Модель техники"""
     name = models.CharField(max_length=100, unique=True, verbose_name='Название')

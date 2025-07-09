@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import (
     TechniqueModel, EngineModel, TransmissionModel,
     DriveAxleModel, SteerAxleModel, MaintenanceType,
-    FailureNode, RecoveryMethod
+    FailureNode, RecoveryMethod, ServiceCompany
 )
 
 class TechniqueModelSerializer(serializers.ModelSerializer):
@@ -43,4 +43,9 @@ class FailureNodeSerializer(serializers.ModelSerializer):
 class RecoveryMethodSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecoveryMethod
+        fields = ['id', 'name', 'description']
+
+class ServiceCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceCompany
         fields = ['id', 'name', 'description']

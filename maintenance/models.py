@@ -4,15 +4,36 @@ from machines.models import Machine
 from directories.models import MaintenanceType, ServiceCompany
 
 class Maintenance(models.Model):
-    """Техническое обслуживание"""
+    """Модель технического обслуживания"""
+    
+    # 1. Вид ТО (справочник)
     maintenance_type = models.ForeignKey(MaintenanceType, on_delete=models.CASCADE, verbose_name='Вид ТО')
+    
+    # 2. Дата проведения ТО
     maintenance_date = models.DateField(verbose_name='Дата проведения ТО')
-    operating_hours = models.IntegerField(verbose_name='Наработка, м/час')
+    
+    # 3. Наработка, м/час
+    operating_hours = models.PositiveIntegerField(verbose_name='Наработка, м/час')
+    
+    # 4. № заказ-наряда
     work_order_number = models.CharField(max_length=100, verbose_name='№ заказ-наряда')
+    
+    # 5. Дата заказ-наряда
     work_order_date = models.DateField(verbose_name='Дата заказ-наряда')
+    
+    # 6. Организация, проводившая ТО
     maintenance_company = models.CharField(max_length=200, verbose_name='Организация, проводившая ТО')
-    machine = models.ForeignKey(Machine, on_delete=models.CASCADE, related_name='maintenances', verbose_name='Машина')
-    service_company = models.ForeignKey(ServiceCompany, on_delete=models.CASCADE, verbose_name='Сервисная компания')
+    
+    # 7. Машина (база данных машин)
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE, verbose_name='Машина')
+    
+    # 8. Сервисная компания (справочник)
+    service_company = models.ForeignKey(
+        ServiceCompany, 
+        on_delete=models.CASCADE, 
+        related_name='maintenance_records',
+        verbose_name='Сервисная компания'
+    )
     
     class Meta:
         verbose_name = 'Техническое обслуживание'
@@ -20,4 +41,4 @@ class Maintenance(models.Model):
         ordering = ['-maintenance_date']
     
     def __str__(self):
-        return f"{self.maintenance_type.name} - {self.machine.serial_number} - {self.maintenance_date}"
+        return f"ТО {self.maintenance_type} - {self.machine.serial_number}"

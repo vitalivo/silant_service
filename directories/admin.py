@@ -1,9 +1,15 @@
 from django.contrib import admin
 from .models import (
-    TechniqueModel, EngineModel, TransmissionModel,
-    DriveAxleModel, SteerAxleModel, MaintenanceType, 
-    FailureNode, RecoveryMethod, ServiceCompany
+    Directory, TechniqueModel, EngineModel, TransmissionModel,
+    DriveAxleModel, SteerAxleModel, MaintenanceType, FailureNode, 
+    RecoveryMethod, ServiceCompany
 )
+
+@admin.register(Directory)
+class DirectoryAdmin(admin.ModelAdmin):
+    list_display = ['entity_name', 'name', 'description']
+    list_filter = ['entity_name']
+    search_fields = ['name', 'description']
 
 @admin.register(TechniqueModel)
 class TechniqueModelAdmin(admin.ModelAdmin):

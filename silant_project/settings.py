@@ -26,7 +26,14 @@ SECRET_KEY = 'django-insecure-@91^t1vjm*7p!(&@1j1(*s@-+7500e8q00j+pcv!5)u#g$e9+l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    '0.0.0.0',
+    '192.168.1.164',  # Добавляем ваш локальный IP
+    '192.168.1.*',    # Разрешаем всю локальную сеть
+    '*'               # Для разработки разрешаем все хосты
+]
 
 
 # Application definition
@@ -158,7 +165,9 @@ REST_FRAMEWORK = {
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",  # Vite dev server
     "http://127.0.0.1:5173",
 ]
 
